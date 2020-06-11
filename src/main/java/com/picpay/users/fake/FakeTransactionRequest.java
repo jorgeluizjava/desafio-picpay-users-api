@@ -24,7 +24,7 @@ public class FakeTransactionRequest {
         this.value = value;
     }
 
-    public BigDecimal getValue() {
-        return value;
+    public boolean accept() {
+        return value.compareTo(new BigDecimal("100")) < 0;
     }
 }
