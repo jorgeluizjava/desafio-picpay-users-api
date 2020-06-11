@@ -5,10 +5,9 @@ import org.springframework.util.Assert;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
 
 @Entity
-public class AccountOwner {
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,10 +22,10 @@ public class AccountOwner {
     private User user;
 
     @Deprecated
-    public AccountOwner() {
+    public Account() {
     }
 
-    public AccountOwner(@NotBlank String userName, @NotNull User user) {
+    public Account(@NotBlank String userName, @NotNull User user) {
         Assert.hasText(userName, "userName is required");
         Assert.notNull(user, "user is required");
         this.userName = userName;

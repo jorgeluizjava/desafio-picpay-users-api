@@ -7,12 +7,12 @@ import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 
-public class CreateConsumerRequest implements AccountRequest {
+public class CreateConsumerRequest {
 
-    @UniqueField(domainAttribute = "accountOwner.user.id", klass = Consumer.class, message = "userId already exists")
+    @UniqueField(domainAttribute = "account.user.id", klass = Consumer.class, message = "userId already exists")
     private Long userId;
 
-    @UniqueField(domainAttribute = "accountOwner.userName", klass = Consumer.class, message = "username already exists")
+    @UniqueField(domainAttribute = "account.userName", klass = Consumer.class, message = "username already exists")
     @JsonProperty(value = "username")
     private String userName;
 
@@ -28,7 +28,6 @@ public class CreateConsumerRequest implements AccountRequest {
         return userId;
     }
 
-    @Override
     public String getUserName() {
         return userName;
     }

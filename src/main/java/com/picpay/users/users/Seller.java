@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 public class Seller {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String cnpj;
@@ -16,8 +15,9 @@ public class Seller {
     private String socialName;
 
     @NotNull
-    @OneToOne(cascade = CascadeType.PERSIST)
-    private AccountOwner accountOwner;
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    private Account account;
 
     /**
      * Frameworks only
@@ -29,7 +29,7 @@ public class Seller {
         this.cnpj = cnpj;
         this.fantasyName = fantasyName;
         this.socialName = socialName;
-        this.accountOwner = new AccountOwner(userName, user);
+        this.account = new Account(userName, user);
     }
 
     public Long getId() {
@@ -37,11 +37,11 @@ public class Seller {
     }
 
     public User getUser() {
-        return this.accountOwner.getUser();
+        return this.account.getUser();
     }
 
     public String getUserName() {
-        return this.accountOwner.getUserName();
+        return this.account.getUserName();
     }
 
     public String getCnpj() {

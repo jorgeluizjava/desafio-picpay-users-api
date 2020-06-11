@@ -13,12 +13,12 @@ import javax.validation.constraints.NotNull;
 public class Consumer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @OneToOne(cascade = CascadeType.PERSIST)
-    private AccountOwner accountOwner;
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    private Account account;
 
     /**
      * Frameworks only
@@ -29,7 +29,7 @@ public class Consumer {
     public Consumer(@NotNull User user, @NotBlank String userName) {
         Assert.notNull(user, "user is required");
         Assert.hasText(userName, "userName is required");
-        this.accountOwner = new AccountOwner(userName, user);
+        this.account = new Account(userName, user);
     }
 
     public Long getId() {
@@ -37,10 +37,10 @@ public class Consumer {
     }
 
     public String getUserName() {
-        return this.accountOwner.getUserName();
+        return this.account.getUserName();
     }
 
     public User getUser() {
-        return this.accountOwner.getUser();
+        return this.account.getUser();
     }
 }

@@ -20,9 +20,9 @@ public class CreateUserController {
     @PostMapping("/users")
     @Transactional
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDetailResponse create(@RequestBody @Valid CreateUserRequest createUserRequest) {
+    public UserDetailDTO create(@RequestBody @Valid CreateUserRequest createUserRequest) {
         User user = createUserRequest.toModel();
         manager.persist(user);
-        return new UserDetailResponse(user);
+        return new UserDetailDTO(user);
     }
 }

@@ -2,10 +2,14 @@ package com.picpay.users.users;
 
 import com.picpay.users.validators.UniqueField;
 
+import javax.validation.constraints.NotBlank;
+
 public class CreateUserRequest {
 
+    @NotBlank
     @UniqueField(domainAttribute = "cpf", klass = User.class, message = "CPF already exists")
     private String cpf;
+    @NotBlank
     @UniqueField(domainAttribute = "email", klass = User.class, message = "E-mail already exists")
     private String email;
     private String fullName;

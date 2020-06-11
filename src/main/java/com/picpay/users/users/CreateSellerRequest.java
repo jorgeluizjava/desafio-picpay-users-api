@@ -13,10 +13,10 @@ public class CreateSellerRequest {
     private String fantasyName;
     private String socialName;
 
-    @UniqueField(domainAttribute = "accountOwner.user.id", klass = Seller.class, message = "userId already exists")
+    @UniqueField(domainAttribute = "account.user.id", klass = Seller.class, message = "userId already exists")
     private Long userId;
 
-    @UniqueField(domainAttribute = "accountOwner.userName", klass = Seller.class, message = "username already exists")
+    @UniqueField(domainAttribute = "account.userName", klass = Seller.class, message = "username already exists")
     @JsonProperty(value = "username")
     private String userName;
 

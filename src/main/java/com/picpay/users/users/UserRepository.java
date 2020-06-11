@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface UserRepository extends Repository<User, Long> {
 
-    @Query(value = "SELECT DISTINCT u.* FROM user u LEFT JOIN account_owner a ON u.id = a.user_id WHERE (u.full_name LIKE :value% OR a.user_name LIKE :value%)", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT u.* FROM user u LEFT JOIN account a ON u.id = a.user_id WHERE (u.full_name LIKE :value% OR a.user_name LIKE :value%)", nativeQuery = true)
     List<User> findByNameOrUserName(@Param("value") String value);
 
     Optional<User> findById(Long id);
