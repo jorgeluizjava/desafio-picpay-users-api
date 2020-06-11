@@ -8,9 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "account_type")
-public abstract class Account {
+public class AccountOwner {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,25 +23,21 @@ public abstract class Account {
     private User user;
 
     @Deprecated
-    public Account() {
+    public AccountOwner() {
     }
 
-    public Account(@NotBlank String userName, @NotNull User user) {
+    public AccountOwner(@NotBlank String userName, @NotNull User user) {
+        Assert.hasText(userName, "userName is required");
+        Assert.notNull(user, "user is required");
         this.userName = userName;
         this.user = user;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Account account = (Account) o;
-        return userName.equals(account.userName);
+    public String getUserName() {
+        return userName;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(userName);
+    public User getUser() {
+        return user;
     }
-
 }

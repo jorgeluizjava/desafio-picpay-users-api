@@ -21,10 +21,8 @@ public class CreateUserController {
     @Transactional
     @ResponseStatus(HttpStatus.CREATED)
     public UserDetailResponse create(@RequestBody @Valid CreateUserRequest createUserRequest) {
-
         User user = createUserRequest.toModel();
         manager.persist(user);
-
         return new UserDetailResponse(user);
     }
 }

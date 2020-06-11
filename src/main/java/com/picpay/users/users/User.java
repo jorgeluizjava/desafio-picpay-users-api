@@ -1,12 +1,13 @@
 package com.picpay.users.users;
 
+import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.Objects;
 
 @Entity
 @Table(name = "user")
@@ -16,16 +17,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @CPF
     @Column(nullable = false, unique = true)
     private String cpf;
+
+    @NotBlank
     @Column(nullable = false, unique = true)
+    @Email
     private String email;
+
     private String fullName;
     private String password;
     private String phoneNumber;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    private Set<Account> accounts = new HashSet<>();
 
     /**
      * Frameworks only
@@ -33,7 +37,9 @@ public class User {
     @Deprecated
     public User() {}
 
-    public User(String cpf, String email, String fullName, String password, String phoneNumber) {
+    public User(@NotBlank @CPF String cpf, @NotBlank @CPF String email, String fullName, String password, String phoneNumber) {
+        Assert.hasText(cpf, "CPF is required");
+        Assert.hasText(email, "email is required");
         this.cpf = cpf;
         this.email = email;
         this.fullName = fullName;
@@ -65,26 +71,16 @@ public class User {
         return phoneNumber;
     }
 
-    public void add(@NotNull Account account) {
-        Assert.notNull(account, "account is required");
-        Optional<Account> alreadyExists = accountTypeAlreadyExists(account);
-        if (alreadyExists.isPresent()) {
-            throw new IllegalArgumentException("Account type already exists!");
-        }
-        accounts.add(account);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return cpf.equals(user.cpf);
     }
 
-    public Optional<Account> getAccout(AccountType accountType) {
-        return accounts
-                .stream()
-                .filter(currentAccount -> currentAccount.isSameType(accountType))
-                .findFirst();
-    }
-
-    private Optional<Account> accountTypeAlreadyExists(Account account) {
-        return accounts
-                .stream()
-                .filter(currentAccount -> currentAccount.isSameType(account.getAccountType()))
-                .findAny();
+    @Override
+    public int hashCode() {
+        return Objects.hash(cpf);
     }
 }

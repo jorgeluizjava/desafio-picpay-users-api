@@ -3,14 +3,16 @@ package com.picpay.users.users;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.util.Assert;
 
-public class Seller {
+public class SellerDTO {
 
     private Long id;
     @JsonProperty("username")
     private String userName;
+
     private String cnpj;
     private String fantasyName;
     private String socialName;
+
     @JsonProperty("user_id")
     private Long userId;
 
@@ -18,17 +20,17 @@ public class Seller {
      * Frameworks only
      */
     @Deprecated
-    public Seller() {
+    public SellerDTO() {
     }
 
-    public Seller(Account account) {
-        Assert.notNull(account, "account is required");
-        this.id = account.getId();
-        this.userId = account.getUser().getId();
-        this.userName = account.getUserName();
-        this.cnpj = account.getCnpj();
-        this.fantasyName = account.getFantasyName();
-        this.socialName = account.getSocialName();
+    public SellerDTO(Seller seller) {
+        Assert.notNull(seller, "seller is required");
+        this.id = seller.getId();
+        this.userId = seller.getUser().getId();
+        this.userName = seller.getUserName();
+        this.cnpj = seller.getCnpj();
+        this.fantasyName = seller.getFantasyName();
+        this.socialName = seller.getSocialName();
     }
 
     public Long getId() {
