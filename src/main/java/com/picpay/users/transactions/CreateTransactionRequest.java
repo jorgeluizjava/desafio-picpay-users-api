@@ -45,4 +45,8 @@ public class CreateTransactionRequest {
         Account payer = FindById.execute(payerId, manager, Account.class);
         return new Transaction(payee, payer, value);
     }
+
+    public boolean isSameAccount() {
+        return payerId.equals(payeeId);
+    }
 }

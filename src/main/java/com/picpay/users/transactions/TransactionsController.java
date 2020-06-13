@@ -1,17 +1,15 @@
 package com.picpay.users.transactions;
 
-import com.picpay.users.exception.TransactionNotAuthorizedException;
 import com.picpay.users.shared.FindById;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.Valid;
 
 @RestController
 public class TransactionsController {
@@ -20,24 +18,20 @@ public class TransactionsController {
     private EntityManager manager;
 
     @Autowired
-    private RestTemplate client;
+    private AuthorizationTransaction authorizationTransaction;
 
-    @InitBinder(value = "transactionRequest")
+    @InitBinder(value = "createTransactionRequest")
     public void init(WebDataBinder dataBinder) {
         dataBinder.addValidators(new CheckIfExistsAccountValidator(manager));
+        dataBinder.addValidators(new CheckIfNotSameAccountValidator());
     }
 
     @PostMapping(value = "/transactions")
     @Transactional
     @ResponseStatus(HttpStatus.CREATED)
-    public TransactionDetailResponse create(@RequestBody CreateTransactionRequest createTransactionRequest) {
+    public TransactionDetailResponse create(@RequestBody @Valid CreateTransactionRequest createTransactionRequest) {
 
-        ResponseEntity<TransactionResponse> postForEntity = client.postForEntity("http://localhost:8000/faketransactions", createTransactionRequest, TransactionResponse.class);
-        TransactionResponse transactionResponse = postForEntity.getBody();
-
-        if (!transactionResponse.isAuthorized()) {
-            throw new TransactionNotAuthorizedException("Transaction not authorized");
-        }
+        authorizationTransaction.authorize(createTransactionRequest);
 
         Transaction transaction = createTransactionRequest.toModel(manager);
         manager.persist(transaction);

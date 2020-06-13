@@ -41,6 +41,8 @@ public class Transaction {
         Assert.notNull(payee, "payee is required");
         Assert.notNull(payer, "payer is required");
 
+        Assert.isTrue(!payer.equals(payee), "payee and payer must be different");
+
         this.payee = payee;
         this.payer = payer;
         this.value = value;
