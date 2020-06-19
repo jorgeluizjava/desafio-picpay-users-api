@@ -12,6 +12,15 @@ public class FakeTransactionRequest {
     private Long payerId;
     private BigDecimal value;
 
+    public FakeTransactionRequest() {
+    }
+
+    public FakeTransactionRequest(Long payeeId, Long payerId, BigDecimal value) {
+        this.payeeId = payeeId;
+        this.payerId = payerId;
+        this.value = value;
+    }
+
     public void setPayeeId(Long payeeId) {
         this.payeeId = payeeId;
     }

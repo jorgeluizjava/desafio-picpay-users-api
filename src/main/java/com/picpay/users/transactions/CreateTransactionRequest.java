@@ -2,6 +2,7 @@ package com.picpay.users.transactions;
 
 import com.picpay.users.shared.FindById;
 import com.picpay.users.users.Account;
+import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.validation.constraints.NotNull;
@@ -15,6 +16,24 @@ public class CreateTransactionRequest {
     private Long payerId;
     @NotNull
     private BigDecimal value;
+
+    @Deprecated
+    public CreateTransactionRequest() {
+    }
+
+    public CreateTransactionRequest(
+                    @NotNull Long payeeId,
+                    @NotNull Long payerId,
+                    @NotNull BigDecimal value) {
+
+        Assert.notNull(payeeId, "payeeId is required");
+        Assert.notNull(payerId, "payepayerIdeId is required");
+        Assert.notNull(value, "value is required");
+
+        this.payeeId = payeeId;
+        this.payerId = payerId;
+        this.value = value;
+    }
 
     public void setPayeeId(Long payeeId) {
         this.payeeId = payeeId;
