@@ -1,42 +1,47 @@
 package com.picpay.users.users;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.util.Assert;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
+@Entity
+@Table(name = "seller")
 public class Seller {
 
+    @Id
     private Long id;
-    @JsonProperty("username")
-    private String userName;
+
     private String cnpj;
     private String fantasyName;
     private String socialName;
-    @JsonProperty("user_id")
-    private Long userId;
+
+    @NotNull
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    private Account account;
 
     /**
      * Frameworks only
      */
     @Deprecated
-    public Seller() {
-    }
+    public Seller() {}
 
-    public Seller(Account account) {
-        Assert.notNull(account, "account is required");
-        this.id = account.getId();
-        this.userId = account.getUser().getId();
-        this.userName = account.getUserName();
-        this.cnpj = account.getCnpj();
-        this.fantasyName = account.getFantasyName();
-        this.socialName = account.getSocialName();
+    public Seller(@NotNull User user, String userName, String cnpj, String fantasyName, String socialName) {
+        this.cnpj = cnpj;
+        this.fantasyName = fantasyName;
+        this.socialName = socialName;
+        this.account = new Account(userName, user);
     }
 
     public Long getId() {
         return id;
     }
 
+    public User getUser() {
+        return this.account.getUser();
+    }
+
     public String getUserName() {
-        return userName;
+        return this.account.getUserName();
     }
 
     public String getCnpj() {
@@ -51,7 +56,4 @@ public class Seller {
         return socialName;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
 }

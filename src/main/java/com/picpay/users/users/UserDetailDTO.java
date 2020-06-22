@@ -4,7 +4,7 @@ import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
 
-public class UserDetailResponse {
+public class UserDetailDTO {
 
     private Long id;
     private String cpf;
@@ -17,9 +17,9 @@ public class UserDetailResponse {
      * Frameworks only
      */
     @Deprecated
-    public UserDetailResponse() {}
+    public UserDetailDTO() {}
 
-    public UserDetailResponse(@NotNull User user) {
+    public UserDetailDTO(@NotNull User user) {
         Assert.notNull(user, "user is required");
         this.id = user.getId();
         this.cpf = user.getCpf();

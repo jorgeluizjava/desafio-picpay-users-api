@@ -6,7 +6,7 @@ import javax.persistence.Query;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class UniqueFieldValidator implements ConstraintValidator<UniqueField, String> {
+public class UniqueFieldValidator implements ConstraintValidator<UniqueField, Object> {
 
     private String domainAttribute;
     private Class<?> klass;
@@ -20,7 +20,7 @@ public class UniqueFieldValidator implements ConstraintValidator<UniqueField, St
     }
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(Object value, ConstraintValidatorContext constraintValidatorContext) {
         Query query = manager.createQuery("select 1 from "+klass.getName()+" where "+domainAttribute+"=:value");
         query.setParameter("value", value);
         return query.getResultList().isEmpty();

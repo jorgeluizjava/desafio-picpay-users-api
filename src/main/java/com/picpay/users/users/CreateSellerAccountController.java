@@ -1,6 +1,5 @@
 package com.picpay.users.users;
 
-import com.picpay.users.shared.FindById;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,13 +20,9 @@ public class CreateSellerAccountController {
     @PostMapping("/users/sellers")
     @Transactional
     @ResponseStatus(HttpStatus.CREATED)
-    public Seller create(@RequestBody @Valid CreateSellerRequest createSellerRequest) {
-        User user = FindById.execute(createSellerRequest.getUserId(), manager, User.class);
-        Account sellerAccount = createSellerRequest.toModel(user);
-        user.add(sellerAccount);
-
-        manager.merge(user);
-
-        return new Seller(user.getAccout(AccountType.SELLER).get());
+    public SellerDTO create(@RequestBody @Valid CreateSellerRequest createSellerRequest) {
+        Seller seller = createSellerRequest.toModel(manager);
+        manager.persist(seller);
+        return new SellerDTO(seller);
     }
 }

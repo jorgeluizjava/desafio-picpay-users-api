@@ -1,16 +1,18 @@
 package com.picpay.users.users;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.picpay.users.shared.FindById;
 import com.picpay.users.validators.UniqueField;
 import org.springframework.util.Assert;
 
-import javax.validation.constraints.NotNull;
+import javax.persistence.EntityManager;
 
-public class CreateConsumerRequest implements AccountRequest {
+public class CreateConsumerRequest {
 
+    @UniqueField(domainAttribute = "account.user.id", klass = Consumer.class, message = "userId already exists")
     private Long userId;
 
-    @UniqueField(domainAttribute = "userName", klass = Account.class, message = "username already exists")
+    @UniqueField(domainAttribute = "account.userName", klass = Consumer.class, message = "username already exists")
     @JsonProperty(value = "username")
     private String userName;
 
@@ -26,13 +28,13 @@ public class CreateConsumerRequest implements AccountRequest {
         return userId;
     }
 
-    @Override
     public String getUserName() {
         return userName;
     }
 
-    public Account toModel(@NotNull User user) {
-        Assert.notNull(user, "user is required");
-        return new Account(userName, user);
+    public Consumer toModel(EntityManager manager) {
+        Assert.notNull(manager, "manager is required");
+        User user = FindById.execute(userId, manager, User.class);
+        return new Consumer(user, userName);
     }
 }
